@@ -31,3 +31,31 @@ int search(trie_t *head, char *word)
 		return 1;
 	return 0;
 }
+
+char *prefix_search(trie_t *head, char *word, FILE *fp)
+{
+	trie_t *buff = head;
+	char str[20], beginning[20];
+	strcpy(beginning, word);
+	for (; *word != '\0', buff->descendants[*word - 'a'] != NULL; word++)
+		buff = buff->descendants[*word - 'a'];
+
+	trie_to_file(buff, 0, beginning, str, fp);
+	return NULL;
+
+}
+
+void trie_to_file(trie_t *trie, int level, char* beginning, char *str, FILE *fp)
+{
+	if (trie->is_final)
+	{
+		str[level] = '\0';
+		fprintf(fp, "%s%s\n", beginning, str);
+	}
+	TRAVERSE_TRIE
+		if (trie->descendants[i] != NULL)
+		{
+			str[level] = i + 'a';
+			trie_to_file(trie->descendants[i], level + 1, beginning, str, fp);
+		}
+}

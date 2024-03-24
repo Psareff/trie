@@ -12,9 +12,10 @@ typedef struct trie {
     int is_final;
 } trie_t;
 
-
 void insert(trie_t *head, char *word);
 int search(trie_t *head, char *word);
+trie_t *create_trie();
+void trie_to_file(trie_t *trie, int level, char *beginning, char *str, FILE *fp);
 //void print(trie_t *head);
 
 #endif //TRIE_H_
