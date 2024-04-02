@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "trie.h"
+#include "../include/trie.h"
 #include "string.h"
+
 
 trie_t *create_trie()
 {
@@ -14,6 +15,7 @@ trie_t *create_trie()
 
 void insert_trie(trie_t *head, char *word)
 {
+	DBG("%s", word);
 	if (*word == '\0') { head->is_final = 1; return; }
 	NODE_BY_LETTER(*word) = NODE_BY_LETTER(*word) ? 
 	                        NODE_BY_LETTER(*word) : 
@@ -24,12 +26,24 @@ void insert_trie(trie_t *head, char *word)
 
 int search(trie_t *head, char *word)
 {
+	DBG("%s", word);
 	trie_t *buff = head;
-	for (; *word != '\0', buff->descendants[*word - 'a'] != NULL; word++)
-		buff = buff->descendants[*word - 'a'];
+	for (; *word != '\0', buff->descendants[*word - FIRST_LETTER] != NULL; word++)
+		buff = buff->descendants[*word - FIRST_LETTER];
 	if (buff->is_final == 1)
 		return 1;
 	return 0;
+}
+
+void delete_trie(trie_t *head, char *word)
+{
+	DBG("%s", word);
+	trie_t *buff = head;
+	for (; *word != '\0', buff->descendants[*word - FIRST_LETTER] != NULL; word++)
+		buff = buff->descendants[*word - FIRST_LETTER];
+	if (buff->is_final == 1)
+		buff->is_final = 0;
+	return;
 }
 
 char *prefix_search(trie_t *head, char *word, FILE *fp)
@@ -37,8 +51,8 @@ char *prefix_search(trie_t *head, char *word, FILE *fp)
 	trie_t *buff = head;
 	char str[20], beginning[20];
 	strcpy(beginning, word);
-	for (; *word != '\0', buff->descendants[*word - 'a'] != NULL; word++)
-		buff = buff->descendants[*word - 'a'];
+	for (; *word != '\0', buff->descendants[*word - FIRST_LETTER] != NULL; word++)
+		buff = buff->descendants[*word - FIRST_LETTER];
 
 	trie_to_file(buff, 0, beginning, str, fp);
 	return NULL;
@@ -47,6 +61,7 @@ char *prefix_search(trie_t *head, char *word, FILE *fp)
 
 void trie_to_file(trie_t *trie, int level, char* beginning, char *str, FILE *fp)
 {
+	DBG("%s", str);
 	if (trie->is_final)
 	{
 		str[level] = '\0';
@@ -55,7 +70,7 @@ void trie_to_file(trie_t *trie, int level, char* beginning, char *str, FILE *fp)
 	TRAVERSE_TRIE
 		if (trie->descendants[i] != NULL)
 		{
-			str[level] = i + 'a';
+			str[level] = i + FIRST_LETTER;
 			trie_to_file(trie->descendants[i], level + 1, beginning, str, fp);
 		}
 }
