@@ -12,9 +12,9 @@
 
 #ifdef DEBUG 
 #define DBG(...) \
-	printf("[File:%s, %s<%d>]: ", __FILE__, __func__, __LINE__); \
+	wprintf(L"[File:%s, %s<%d>]: ", __FILE__, __func__, __LINE__); \
 	wprintf(__VA_ARGS__); \
-	printf("\n"); \
+	wprintf(L"\n"); \
 	fflush(stdout);
 #else 
 #define DBG(...) {}
