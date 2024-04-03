@@ -16,6 +16,7 @@ $(OUTDIR)/%.o : $(SRCDIR)/%.c Makefile
 PROJ_NAME=trie
 
 all: $(OBJS)
+	$(CC) $^ -o $(PROJ_NAME)
 
 configure:
 	mkdir out

@@ -3,17 +3,19 @@
 
 #include <stdio.h>
 
-#define FIRST_LETTER 'a'
-#define ALPHABET_SIZE 26
+#include <wchar.h>
+#define FIRST_LETTER 0x430 
+#define ALPHABET_SIZE 32
 
 #define TRAVERSE_TRIE for (int i = 0; i < ALPHABET_SIZE; i++)
-#define NODE_BY_LETTER(letter) head->descendants[letter - 'a']
+#define NODE_BY_LETTER(letter) head->descendants[letter - FIRST_LETTER]
 
 #ifdef DEBUG 
 #define DBG(...) \
-	printf("[File:%s, %s<%d>: ", __FILE__, __func__, __LINE__); \
-	printf(__VA_ARGS__); \
-	printf("\n");
+	printf("[File:%s, %s<%d>]: ", __FILE__, __func__, __LINE__); \
+	wprintf(__VA_ARGS__); \
+	printf("\n"); \
+	fflush(stdout);
 #else 
 #define DBG(...) {}
 #endif  
@@ -25,11 +27,11 @@ typedef struct trie {
     int is_final;
 } trie_t;
 
-void insert_trie(trie_t *head, char *word);
-int search(trie_t *head, char *word);
+void insert_trie(trie_t *head, wchar_t *word);
+int search(trie_t *head, wchar_t *word);
 trie_t *create_trie();
-void trie_to_file(trie_t *trie, int level, char *beginning, char *str, FILE *fp);
-void delete_trie(trie_t *head, char *word);
+void trie_to_file(trie_t *trie, int level, wchar_t *beginning, wchar_t *str, FILE *fp);
+void delete_trie(trie_t *head, wchar_t *word);
 
 
 #endif //TRIE_H_
